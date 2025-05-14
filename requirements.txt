@@ -4,8 +4,3 @@ joblib
 scikit-learn
 pydantic
 pandas
-gdown
-tensorflow
-numpy
-gdown
-PIL

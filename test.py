@@ -28,7 +28,7 @@ payload = {
   "body_shape": "Hourglass",
   "prompt": "I want something comfortable and not too formal for school",
   "top_k": 3,
-  "gender": "women"
+  "gender": "men"
 }
 
 # Send the POST request

@@ -47,7 +47,8 @@ class RecommendationEngine:
         fashion_scores = self.scoring_engine.compute_scores(attributes)
 
         # Step 3: Filter the dataset for the user's gender
-        filtered_df = self.df_clothing[self.df_clothing['image_label'].str.contains(gender.upper(), case=False)]
+        gender_prefix = f"^{gender.lower()}_"  # e.g., "^men_"
+        filtered_df = self.df_clothing[self.df_clothing['image_label'].str.contains(gender_prefix, case=False, regex=True)]
 
         if filtered_df.empty:
             raise ValueError(f"No clothing items found for gender: {gender}")

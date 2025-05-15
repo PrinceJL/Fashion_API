@@ -20,17 +20,17 @@ recommendation_engine = RecommendationEngine(
 class RecommendationRequest(BaseModel):
     attributes: dict  # Attributes (numeric values for shape, fabric, pattern, etc.)
     body_shape: str  # Body shape (e.g., 'Hourglass')
-    style: str  # Style preference (e.g., 'Casual')
+    prompt: str  # User's prompt (e.g., "I want a casual outfit with a denim jacket")
     top_k: int  # Number of top recommendations to return
-    gender: str  # Gender (e.g., 'male', 'female')
+    gender: str  # Gender (e.g., 'men', 'women')
 
 @app.post("/recommend")
 async def recommend_clothes(request: RecommendationRequest):
     """
-    Recommend the top `k` clothing items based on the provided attributes, body shape, style, and gender.
+    Recommend the top `k` clothing items based on the provided attributes, body shape, and prompt.
 
     Args:
-    - request (RecommendationRequest): Request body containing attributes, body shape, style, top_k, and gender.
+    - request (RecommendationRequest): Request body containing attributes, body shape, prompt, top_k, and gender.
 
     Returns:
     - list: Top `k` recommendations.
@@ -38,7 +38,7 @@ async def recommend_clothes(request: RecommendationRequest):
     recommendations = recommendation_engine.recommend(
         attributes=request.attributes,
         body_shape=request.body_shape,
-        style=request.style,
+        prompt=request.prompt,
         top_k=request.top_k,
         gender=request.gender
     )

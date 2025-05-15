@@ -44,7 +44,7 @@ def parse_prompt(prompt: str):
         occasion_styles.extend(OCCASION_TO_STYLES[occasion])
 
     # Combine detected styles with occasion styles
-    all_styles = list(set(extracted_styles + occasion_styles))  # Remove duplicates
+    all_styles = list(set(extracted_styles + occasion_styles + styles))  # Remove duplicates
 
     # Fallback to "casual" if no style is explicitly mentioned
     if not all_styles:

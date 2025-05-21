@@ -104,19 +104,14 @@ flowchart TD
     D -- Yes --> E[Apply Penalty to Body Shape Score]
     D -- No --> F[Keep Body Shape Score]
     E --> F
-    F --> G[Calculate Occasion Score (weight x1.5)]
+    F --> G[Calculate Occasion Score with Weight 1.5]
     G --> H[Calculate Season Score]
     H --> I{Season Score < Threshold?}
     I -- Yes --> J[Apply Small Penalty to Season Score]
     I -- No --> K[Keep Season Score]
     J --> K
     K --> L[Calculate Feature Match Bonus]
-    L --> M[Combine Scores with Weights:
-    - Style x3.0
-    - Body Shape x2.0
-    - Occasion x2.5
-    - Season x1.5
-    - Feature Bonus]
+    L --> M[Combine Scores with Weights<br>Style x3.0<br>Body Shape x2.0<br>Occasion x2.5<br>Season x1.5<br>Feature Bonus]
     M --> N[Assign Final Score to Outfit]
     N --> O[Repeat for All Outfits]
     O --> P[Sort Outfits by Final Score]

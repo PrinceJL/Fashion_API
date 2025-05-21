@@ -8,7 +8,12 @@ from outfit_recommender.recommender import recommend_best_combined
 from collections import defaultdict
 from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI()
+# Only create ONE FastAPI app instance, and add CORS middleware to it!
+app = FastAPI(
+    title="AI-Driven Outfit Recommender API",
+    description="Recommend outfits based on user profile and natural language prompt.",
+    version="1.0.1"
+)
 
 # Allow local development and production frontend
 origins = [
@@ -18,15 +23,10 @@ origins = [
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], #Dont do this
+    allow_origins=["*"],  
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["*"],  # This enables OPTIONS for CORS preflight
     allow_headers=["*"],
-)
-app = FastAPI(
-    title="AI-Driven Outfit Recommender API",
-    description="Recommend outfits based on user profile and natural language prompt.",
-    version="1.0.1"
 )
 
 # Load at startup

@@ -6,11 +6,27 @@ from outfit_recommender.attribute_mapping import STYLE_NAMES, BODYSHAPE_NAMES
 from outfit_recommender.nlp_prompt_parser import parse_prompt
 from outfit_recommender.recommender import recommend_best_combined
 from collections import defaultdict
+from fastapi.middleware.cors import CORSMiddleware
 
+app = FastAPI()
+
+# Allow local development and production frontend
+origins = [
+    "http://localhost:5173",
+    "http://localhost:3000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins, 
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 app = FastAPI(
     title="AI-Driven Outfit Recommender API",
     description="Recommend outfits based on user profile and natural language prompt.",
-    version="1.0.0"
+    version="1.0.1"
 )
 
 # Load at startup

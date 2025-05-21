@@ -4,18 +4,20 @@ from typing import Optional, List, Dict, Any
 from outfit_recommender.data_loader import load_score_map, load_outfit_dataset
 from outfit_recommender.attribute_mapping import STYLE_NAMES, BODYSHAPE_NAMES
 from outfit_recommender.nlp_prompt_parser import parse_prompt
-from outfit_recommender.recommender import recommend_best_combined
+
+# Import your new recommender function here (adjust path if needed)
+from outfit_recommender.new_recommender import recommend_best_combined
+
 from collections import defaultdict
 from fastapi.middleware.cors import CORSMiddleware
 
-# Only create ONE FastAPI app instance, and add CORS middleware to it!
 app = FastAPI(
     title="AI-Driven Outfit Recommender API",
     description="Recommend outfits based on user profile and natural language prompt.",
     version="1.0.1"
 )
 
-# Allow local development and production frontend
+# Allowed origins for CORS
 origins = [
     "http://localhost:5173",
     "http://localhost:3000",
@@ -23,20 +25,18 @@ origins = [
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  
+    allow_origins=["*"],  # Do not use "*" in production
     allow_credentials=True,
-    allow_methods=["*"],  # This enables OPTIONS for CORS preflight
+    allow_methods=["*"],  
     allow_headers=["*"],
 )
 
-# Load at startup
 STYLE_SCORE_CSV_URL = "https://docs.google.com/spreadsheets/d/1Zx66-QAVjLJjUdP3rVfE2nbCWVQwkVv0IKaLRO7EH9M/export?format=csv&gid=0"
 BODYSHAPE_SCORE_CSV_URL = "https://docs.google.com/spreadsheets/d/1Zx66-QAVjLJjUdP3rVfE2nbCWVQwkVv0IKaLRO7EH9M/export?format=csv&gid=28283272"
 OUTFIT_DATASET_CSV_URL = "https://docs.google.com/spreadsheets/d/1Uj88haHGZCsSQW5c27SDcJyvcBPlLJGP8WKZvw2dWqg/export?format=csv&gid=1320449891"
 
 DEFAULT_ATTR_WEIGHTS = defaultdict(lambda: 1.0)
 
-# Preload data
 @app.on_event("startup")
 def load_data():
     global style_score_map, bodyshape_score_map, outfits
@@ -64,7 +64,6 @@ class RecommendationResponse(BaseModel):
 
 @app.post("/recommend", response_model=RecommendationResponse)
 def recommend_outfits(request: RecommendationRequest):
-    # Filter outfits by gender
     filtered = [o for o in outfits if o['gender'] == request.gender or o['gender'] == "unisex"]
     parsed = parse_prompt(request.prompt)
     style = parsed['style'] or "Casual"

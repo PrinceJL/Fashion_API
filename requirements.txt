@@ -1,4 +1,9 @@
 fastapi
 uvicorn
-requests
+spacy
 pydantic
+requests
+pandas
+scikit-learn
+numpy
+python-multipart

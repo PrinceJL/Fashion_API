@@ -6,7 +6,7 @@ flowchart TD
     API -->|parse prompt| NLP[NLP Prompt Parser]
     API -->|load data| Loader[Data Loader]
     API -->|score| Recommender[Recommendation Engine]
-    Loader -->|Google Sheets (CSV)| Dataset[(Outfits & Scoring Matrices)]
+    Loader -->|Google Sheets (CSV)| Dataset[Outfits & Scoring Matrices]
     NLP -->|style, season, features| Recommender
     Recommender -->|top outfits| API
     API --> Client

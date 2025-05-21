@@ -1,6 +1,6 @@
 # Rule-Based Decision Tree — Expanded Story
 
-This decision tree describes how the AI-Driven Outfit Recommender makes its choices using a clear, step-by-step, rule-based (if-then) logic.
+This decision tree describes how the AI-Driven Outfit Recommender makes its choices using clear, step-by-step, rule-based (if-then) logic.
 
 ---
 
@@ -41,48 +41,10 @@ This decision tree describes how the AI-Driven Outfit Recommender makes its choi
 
 ---
 
-## Example Path Through the Tree
-
-**User Input:**  
-- Gender: male  
-- Body Shape: Triangle  
-- Prompt: "Looking for a formal outfit for winter, long sleeves and wool preferred"
-
-**Branching:**
-
-1. **Gender Match?**  
-   - IF outfit is male or unisex → keep
-
-2. **Body Shape Supported?**  
-   - IF Triangle → continue
-
-3. **Prompt Extraction:**  
-   - Style: formal  
-   - Season: winter  
-   - Features: long sleeves, wool
-
-4. **Feature Match?**  
-   - IF outfit has long sleeves AND wool → keep  
-   - ELSE → discard
-
-5. **Scoring:**  
-   - Calculate Style Score (formal)  
-   - Calculate Body Shape Score (Triangle)  
-   - Calculate Season Score (winter)  
-   - Calculate Occasion Score (formal)  
-   - Add for Total Score
-
-6. **Ranking:**  
-   - Sort by Total Score  
-   - Return top 3 outfits
-
----
-
-## Visual Decision Tree with Scoring Flow Integrated
+## Visual Decision Tree
 
 ```mermaid
 flowchart TD
-    %% Top-Level Decision Flow %%
     Start([Start]) --> GenderCheck{Gender Match?}
     GenderCheck -- Yes --> BodyShapeCheck{Body Shape Supported?}
     GenderCheck -- No --> Exclude1([Exclude Outfit])
@@ -94,10 +56,14 @@ flowchart TD
     FeatureCheck -- Yes --> ScoreBranch[Score Outfit]
     FeatureCheck -- No --> Exclude3([Exclude Outfit])
 
-    ScoreBranch --> ScoringFlowStart[Start Scoring Process]
+    ScoreBranch --> Ranking[Rank by Score]
+    Ranking --> ReturnTopN([Return Top N Outfits])
+```
 
-    %% Detailed Scoring Flow %%
-    ScoringFlowStart --> B{Style Match >= Threshold?}
+## Detailed Scoring Flow
+```mermaid
+flowchart TD
+    A[Start: Receive Outfit & User Preferences] --> B{Style Match >= Threshold?}
     B -- No --> Z[Exclude Outfit]
     B -- Yes --> C[Calculate Body Shape Score]
     C --> D{Body Shape Score < Threshold?}
@@ -116,7 +82,3 @@ flowchart TD
     N --> O[Repeat for All Outfits]
     O --> P[Sort Outfits by Final Score]
     P --> Q[Return Top-K Recommendations]
-
-    %% Back to main flow %%
-    Q --> Ranking[Rank by Score]
-    Ranking --> ReturnTopN([Return Top N Outfits])

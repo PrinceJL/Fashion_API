@@ -29,6 +29,8 @@ This decision tree describes how the AI-Driven Outfit Recommender makes its choi
   → **then** calculate:
     - Style Score (rule-based, using style matrix)
     - Body Shape Score (rule-based, using body shape matrix)
+    - Season Score (heuristic)
+    - Occasion Score (heuristic)
     - Sum for Total Score
 
 ### 6. **Ranking and Return**
@@ -42,8 +44,8 @@ This decision tree describes how the AI-Driven Outfit Recommender makes its choi
 ## Example Path Through the Tree
 
 **User Input:**  
-- Gender: male
-- Body Shape: Triangle
+- Gender: male  
+- Body Shape: Triangle  
 - Prompt: "Looking for a formal outfit for winter, long sleeves and wool preferred"
 
 **Branching:**
@@ -66,6 +68,8 @@ This decision tree describes how the AI-Driven Outfit Recommender makes its choi
 5. **Scoring:**  
    - Calculate Style Score (formal)  
    - Calculate Body Shape Score (Triangle)  
+   - Calculate Season Score (winter)  
+   - Calculate Occasion Score (formal)  
    - Add for Total Score
 
 6. **Ranking:**  
@@ -91,13 +95,34 @@ flowchart TD
 
     ScoreBranch --> Ranking[Rank by Score]
     Ranking --> ReturnTopN([Return Top N Outfits])
-```
 
----
+## Detailed Scoring Flow
 
-## Notes
+This flowchart expands the scoring step with weighted scores, penalties, and bonuses applied in the recommendation process.
 
-- Each branch is a clear IF-THEN statement.
-- Filtering is strict: failing any branch means exclusion.
-- Scoring only happens after all filters pass.
-- Ranking is based solely on computed scores.
+```mermaid
+flowchart TD
+    A[Start: Receive Outfit & User Preferences] --> B{Style Match >= Threshold?}
+    B -- No --> Z[Exclude Outfit]
+    B -- Yes --> C[Calculate Body Shape Score]
+    C --> D{Body Shape Score < Threshold?}
+    D -- Yes --> E[Apply Penalty to Body Shape Score]
+    D -- No --> F[Keep Body Shape Score]
+    E --> F
+    F --> G[Calculate Occasion Score (weight x1.5)]
+    G --> H[Calculate Season Score]
+    H --> I{Season Score < Threshold?}
+    I -- Yes --> J[Apply Small Penalty to Season Score]
+    I -- No --> K[Keep Season Score]
+    J --> K
+    K --> L[Calculate Feature Match Bonus]
+    L --> M[Combine Scores with Weights:
+    - Style x3.0
+    - Body Shape x2.0
+    - Occasion x2.5
+    - Season x1.5
+    - Feature Bonus]
+    M --> N[Assign Final Score to Outfit]
+    N --> O[Repeat for All Outfits]
+    O --> P[Sort Outfits by Final Score]
+    P --> Q[Return Top-K Recommendations]
